@@ -1,4 +1,4 @@
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useFetcher } from "react-router-dom";
 import type { Product } from "../types";
 
 interface ProductDetailsProps {
@@ -9,6 +9,8 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
   if (!product) {
     return null;
   }
+
+  const fetcher = useFetcher();
 
   return (
     <>
@@ -27,13 +29,19 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
               Editar
             </Link>
 
-            <Form method="post" action={`/producto/${product.id}/eliminar`}>
+            <fetcher.Form
+              method="post"
+              action={`/producto/${product.id}/eliminar`}
+            >
               <input
                 type="submit"
+                disabled={fetcher.state === "submitting"}
                 className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md text-white font-bold"
-                value="Eliminar"
+                value={
+                  fetcher.state === "submitting" ? "Eliminando..." : "Eliminar"
+                }
               />
-            </Form>
+            </fetcher.Form>
           </div>
         </td>
       </tr>

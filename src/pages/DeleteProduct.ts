@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, redirect } from "react-router-dom";
+import { type ActionFunctionArgs} from "react-router-dom";
 import { deleteProduct } from "../services/ProductService";
 
 export async function action({ params }: ActionFunctionArgs) {
@@ -6,11 +6,11 @@ export async function action({ params }: ActionFunctionArgs) {
 
   if (!resultado) {
     console.log("Eliminación cancelada por el usuario.");
-    return redirect("/");
+    return { success: false};
   }
 
   if (params.id !== undefined) {
     await deleteProduct(+params.id);
-    return redirect("/");
+    return { success: true };
   }
 }
