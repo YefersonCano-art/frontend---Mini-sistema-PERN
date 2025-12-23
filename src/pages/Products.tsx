@@ -1,4 +1,5 @@
 import { Link, useLoaderData } from "react-router-dom";
+import { useState } from "react";
 import { getProducts } from "../services/ProductService";
 // import type { Product } from "../types";
 import { ProductDetails } from "../components/ProductDetails";
@@ -13,7 +14,15 @@ export async function loader() {
 
 export const Products = () => {
   const products = useLoaderData() as Product[];
+  const [maxPrice, setMaxPrice] = useState<number>(0);
   console.log(products);
+
+  const filterProducts = (price: number): Product[] => {
+    if (price === 0) return products;
+    return products.filter((product) => product.price <= price);
+  };
+
+  const filteredProducts = filterProducts(maxPrice);
 
   return (
     <>
@@ -26,6 +35,27 @@ export const Products = () => {
           Nuevo Producto
         </Link>
       </div>
+
+      <div className="mt-5">
+        <label htmlFor="price-filter" className="text-lg font-semibold text-slate-600">
+          Filtrar por precio máximo:
+        </label>
+        <input
+          id="price-filter"
+          type="number"
+          min="0"
+          placeholder="Ingrese precio máximo"
+          value={maxPrice || ''}
+          onChange={(e) => setMaxPrice(Number(e.target.value))}
+          className="ml-3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        {maxPrice > 0 && (
+          <span className="ml-3 text-sm text-gray-600">
+            Mostrando productos hasta ${maxPrice}
+          </span>
+        )}
+      </div>
+
       {/* <div className="mt-10">
         <p className="text-center text-gray-500">No hay productos aún</p>
       </div> */}
@@ -40,7 +70,7 @@ export const Products = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductDetails key={product.id} product={product} />
             ))}
           </tbody>
