@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/productos';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/productos';
 
 // Obtener todos los productos
 export async function getProducts() {

@@ -1,4 +1,4 @@
-import { Form, Link, useFetcher } from "react-router-dom";
+import { Link, useFetcher } from "react-router-dom";
 import type { Product } from "../types";
 
 interface ProductDetailsProps {
